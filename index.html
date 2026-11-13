@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lahore Crust - Futuristic Artisan Gastronomy</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neonBlue: '#00f0ff',
+                        neonPurple: '#b000ff',
+                        darkBg: '#050508',
+                        cardBg: '#0d0e15',
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(0, 240, 255, 0.4)',
+                        'neon-lg': '0 0 40px rgba(0, 240, 255, 0.6)',
+                        'neon-purple': '0 0 30px rgba(176, 0, 255, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js for 3D elements -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050508;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        /* 3D Rotating Header Effect */
+        .neon-3d-header {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px rgba(0, 240, 255, 0.8),
+                0 0 20px rgba(0, 240, 255, 0.6),
+                0 0 30px rgba(0, 240, 255, 0.4),
+                0 0 40px rgba(0, 240, 255, 0.2);
+            animation: rotate3dText 8s ease-in-out infinite alternate;
+            transform-style: preserve-3d;
+        }
+        @keyframes rotate3dText {
+            0% {
+                transform: perspective(600px) rotateX(10deg) rotateY(-10deg) scale(1);
+                text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 240, 255, 0.6);
+            }
+            50% {
+                transform: perspective(600px) rotateX(-5deg) rotateY(10deg) scale(1.02);
+                text-shadow: 0 0 15px rgba(176, 0, 255, 0.9), 0 0 30px rgba(0, 240, 255, 0.8);
+            }
+            100% {
+                transform: perspective(600px) rotateX(5deg) rotateY(-5deg) scale(1);
+                text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 240, 255, 0.6);
+            }
+        }
+        /* Card Tilt Effect */
+        .tilt-card {
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .tilt-card:hover {
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            border-color: rgba(0, 240, 255, 0.6);
+        }
+        /* Custom WebGL Canvas container */
+        #webgl-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-white antialiased relative selection:bg-neonBlue selection:text-black">
+
+    <!-- Background WebGL Particle Simulation -->
+    <div id="webgl-container"></div>
+
+    <!-- Top Notification Bar -->
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-darkBg/80 border-b border-neonBlue/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-neonBlue to-neonPurple p-0.5 shadow-neon">
+                    <div class="w-full h-full bg-darkBg rounded-[10px] flex items-center justify-center font-orbitron font-bold text-neonBlue text-lg">
+                        LC
+                    </div>
+                </div>
+                <div>
+                    <span class="font-orbitron font-extrabold tracking-wider text-lg text-transparent bg-clip-text bg-gradient-to-r from-neonBlue via-white to-neonPurple">LAHORE CRUST</span>
+                    <p class="text-xs text-neonBlue/70 tracking-widest uppercase">Cyber-Gastronomy Edition</p>
+                </div>
+            </div>
+
+            <!-- Instant WhatsApp Action -->
+            <a href="https://wa.me/" target="_blank" class="flex items-center space-x-2 bg-gradient-to-r from-neonBlue/20 to-neonPurple/20 border border-neonBlue/50 hover:border-neonBlue text-neonBlue px-4 py-2.5 rounded-xl font-orbitron text-xs font-bold transition-all duration-300 shadow-neon hover:shadow-neon-lg">
+                <i class="fa-brands fa-whatsapp text-lg text-neonBlue"></i>
+                <span class="hidden sm:inline">INSTANT WHATSAPP</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-20 pb-16 overflow-hidden z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-neonBlue/40 bg-neonBlue/10 text-neonBlue text-xs font-orbitron tracking-widest shadow-neon animate-pulse">
+                ✨ NEXT-GEN LIQUID METAL ARCHITECTURE
+            </div>
+            
+            <!-- 3D Rotating Header -->
+            <h1 class="neon-3d-header text-4xl sm:text-6xl lg:text-7xl mb-6">
+                The Future of <br class="hidden sm:inline" /> Artisan Gastronomy
+            </h1>
+
+            <p class="max-w-2xl mx-auto text-gray-400 text-sm sm:text-base mb-10 leading-relaxed">
+                Transcending traditional local boundaries. Lahore Crust delivers high-performance 3D digital luxury and handcrafted patisserie directly to international connoisseurs and elite clientele.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16">
+                <a href="#menu-section" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-neonBlue to-blue-600 text-black font-orbitron font-bold text-sm tracking-wider shadow-neon hover:shadow-neon-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                    EXPLORE SIGNATURE MENU
+                </a>
+                <a href="https://wa.me/" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-cardBg border border-neonPurple/50 hover:border-neonPurple text-neonPurple font-orbitron font-bold text-sm tracking-wider shadow-neon-purple transition-all duration-300">
+                    GLOBAL CONCIERGE (WHATSAPP)
+                </a>
+            </div>
+
+            <!-- Performance Metrics Badges -->
+            <div class="grid grid-cols-3 gap-4 max-w-3xl mx-auto border border-neonBlue/20 bg-cardBg/60 backdrop-blur-md p-6 rounded-2xl shadow-neon">
+                <div class="text-center">
+                    <div class="font-orbitron font-black text-2xl sm:text-3xl text-neonBlue">0.1s</div>
+                    <div class="text-[10px] sm:text-xs text-gray-400 tracking-wider mt-1">RENDER LATENCY</div>
+                </div>
+                <div class="border-x border-neonBlue/20 text-center">
+                    <div class="font-orbitron font-black text-2xl sm:text-3xl text-white">100%</div>
+                    <div class="text-[10px] sm:text-xs text-gray-400 tracking-wider mt-1">CUSTOM WEBGL</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-orbitron font-black text-2xl sm:text-3xl text-neonPurple">Global</div>
+                    <div class="text-[10px] sm:text-xs text-gray-400 tracking-wider mt-1">EXPRESS DELIVERY</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive 3D Showcase Section -->
+    <section id="menu-section" class="py-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron font-extrabold text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-neonBlue to-neonPurple mb-3">
+                    ARTISANAL MASTERPIECES
+                </h2>
+                <p class="text-gray-400 text-sm max-w-lg mx-auto">
+                    Crafted with precision engineering and world-class culinary expertise for discerning international clients.
+                </p>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Item 1: Truffle Wagyu Burger -->
+                <div class="tilt-card bg-cardBg border border-neonBlue/30 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute top-4 right-4 z-10 bg-neonBlue/20 border border-neonBlue text-neonBlue text-[10px] font-orbitron px-2.5 py-1 rounded-full uppercase tracking-widest shadow-neon">
+                        Signature Burger
+                    </div>
+                    <div class="relative h-60 rounded-xl overflow-hidden mb-5 bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
+                        <img src="https://placehold.co/600x400/0d0e15/00f0ff?text=Truffle+Wagyu+Burger" alt="Truffle Wagyu Burger" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111/fff?text=Burger'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cardBg via-transparent to-transparent"></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-orbitron font-bold text-lg text-white">Truffle Wagyu Burger</h3>
+                            <span class="font-orbitron font-black text-xl text-neonBlue">$24</span>
+                        </div>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                            A5 Wagyu patty, black truffle aioli, aged Gruyère on a brioche crust.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/?text=I%20want%20to%20order%20Truffle%20Wagyu%20Burger%20($24)" target="_blank" class="w-full py-3 rounded-xl bg-neonBlue/10 border border-neonBlue/50 hover:bg-neonBlue hover:text-black text-neonBlue font-orbitron font-bold text-xs tracking-wider text-center transition-all duration-300 shadow-neon">
+                        ORDER ON WHATSAPP
+                    </a>
+                </div>
+
+                <!-- Item 2: Gold Leaf Margherita -->
+                <div class="tilt-card bg-cardBg border border-neonBlue/30 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute top-4 right-4 z-10 bg-yellow-500/20 border border-yellow-400 text-yellow-400 text-[10px] font-orbitron px-2.5 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                        Wood Fired
+                    </div>
+                    <div class="relative h-60 rounded-xl overflow-hidden mb-5 bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
+                        <img src="https://placehold.co/600x400/0d0e15/fbbf24?text=Gold+Leaf+Margherita" alt="Gold Leaf Margherita" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111/fff?text=Pizza'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cardBg via-transparent to-transparent"></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-orbitron font-bold text-lg text-white">Gold Leaf Margherita</h3>
+                            <span class="font-orbitron font-black text-xl text-yellow-400">$32</span>
+                        </div>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                            San Marzano DOP, buffalo mozzarella, edible gold leaf flakes & basil.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/?text=I%20want%20to%20order%20Gold%20Leaf%20Margherita%20($32)" target="_blank" class="w-full py-3 rounded-xl bg-yellow-500/10 border border-yellow-500/50 hover:bg-yellow-400 hover:text-black text-yellow-400 font-orbitron font-bold text-xs tracking-wider text-center transition-all duration-300 shadow-lg">
+                        ORDER ON WHATSAPP
+                    </a>
+                </div>
+
+                <!-- Item 3: Royal Opera Dome -->
+                <div class="tilt-card bg-cardBg border border-neonBlue/30 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute top-4 right-4 z-10 bg-neonPurple/20 border border-neonPurple text-neonPurple text-[10px] font-orbitron px-2.5 py-1 rounded-full uppercase tracking-widest shadow-neon-purple">
+                        Patisserie
+                    </div>
+                    <div class="relative h-60 rounded-xl overflow-hidden mb-5 bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
+                        <img src="https://placehold.co/600x400/0d0e15/b000ff?text=Royal+Opera+Dome" alt="Royal Opera Dome" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111/fff?text=Pastry'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cardBg via-transparent to-transparent"></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-orbitron font-bold text-lg text-white">Royal Opera Dome</h3>
+                            <span class="font-orbitron font-black text-xl text-neonPurple">$28</span>
+                        </div>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                            Valrhona dark chocolate mousse, hazelnut praline crunch, gold mirror glaze.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/?text=I%20want%20to%20order%20Royal%20Opera%20Dome%20($28)" target="_blank" class="w-full py-3 rounded-xl bg-neonPurple/10 border border-neonPurple/50 hover:bg-neonPurple hover:text-white text-neonPurple font-orbitron font-bold text-xs tracking-wider text-center transition-all duration-300 shadow-neon-purple">
+                        ORDER ON WHATSAPP
+                    </a>
+                </div>
+
+                <!-- Item 4: Midnight Velvet Tiramisu -->
+                <div class="tilt-card bg-cardBg border border-neonBlue/30 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute top-4 right-4 z-10 bg-neonPurple/20 border border-neonPurple text-neonPurple text-[10px] font-orbitron px-2.5 py-1 rounded-full uppercase tracking-widest shadow-neon-purple">
+                        Patisserie
+                    </div>
+                    <div class="relative h-60 rounded-xl overflow-hidden mb-5 bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
+                        <img src="https://placehold.co/600x400/0d0e15/b000ff?text=Midnight+Velvet+Tiramisu" alt="Midnight Velvet Tiramisu" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111/fff?text=Tiramisu'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cardBg via-transparent to-transparent"></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-orbitron font-bold text-lg text-white">Midnight Velvet Tiramisu</h3>
+                            <span class="font-orbitron font-black text-xl text-neonPurple">$22</span>
+                        </div>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                            Italian mascarpone layered with espresso-soaked artisanal sponge and dark cacao dust.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/?text=I%20want%20to%20order%20Midnight%20Velvet%20Tiramisu%20($22)" target="_blank" class="w-full py-3 rounded-xl bg-neonPurple/10 border border-neonPurple/50 hover:bg-neonPurple hover:text-white text-neonPurple font-orbitron font-bold text-xs tracking-wider text-center transition-all duration-300 shadow-neon-purple">
+                        ORDER ON WHATSAPP
+                    </a>
+                </div>
+
+                <!-- Item 5: Uji Matcha Opera Cake -->
+                <div class="tilt-card bg-cardBg border border-neonBlue/30 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute top-4 right-4 z-10 bg-emerald-500/20 border border-emerald-400 text-emerald-400 text-[10px] font-orbitron px-2.5 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                        Patisserie
+                    </div>
+                    <div class="relative h-60 rounded-xl overflow-hidden mb-5 bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
+                        <img src="https://placehold.co/600x400/0d0e15/10b981?text=Uji+Matcha+Opera+Cake" alt="Uji Matcha Opera Cake" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111/fff?text=Matcha+Cake'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cardBg via-transparent to-transparent"></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-orbitron font-bold text-lg text-white">Uji Matcha Opera Cake</h3>
+                            <span class="font-orbitron font-black text-xl text-emerald-400">$25</span>
+                        </div>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                            Ceremonial grade Japanese matcha paired with almond joconde and white chocolate ganache.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/?text=I%20want%20to%20order%20Uji%20Matcha%20Opera%20Cake%20($25)" target="_blank" class="w-full py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/50 hover:bg-emerald-400 hover:text-black text-emerald-400 font-orbitron font-bold text-xs tracking-wider text-center transition-all duration-300 shadow-lg">
+                        ORDER ON WHATSAPP
+                    </a>
+                </div>
+
+                <!-- Item 6: Kashmiri Saffron Tart -->
+                <div class="tilt-card bg-cardBg border border-neonBlue/30 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute top-4 right-4 z-10 bg-amber-500/20 border border-amber-400 text-amber-400 text-[10px] font-orbitron px-2.5 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                        Patisserie
+                    </div>
+                    <div class="relative h-60 rounded-xl overflow-hidden mb-5 bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
+                        <img src="https://placehold.co/600x400/0d0e15/f59e0b?text=Kashmiri+Saffron+Tart" alt="Kashmiri Saffron Tart" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111/fff?text=Saffron+Tart'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cardBg via-transparent to-transparent"></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-orbitron font-bold text-lg text-white">Kashmiri Saffron Tart</h3>
+                            <span class="font-orbitron font-black text-xl text-amber-400">$20</span>
+                        </div>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                            Delicate pastry crust filled with saffron-infused cream, crushed pistachios, and edible florals.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/?text=I%20want%20to%20order%20Kashmiri%20Saffron%20Tart%20($20)" target="_blank" class="w-full py-3 rounded-xl bg-amber-500/10 border border-amber-500/50 hover:bg-amber-400 hover:text-black text-amber-400 font-orbitron font-bold text-xs tracking-wider text-center transition-all duration-300 shadow-lg">
+                        ORDER ON WHATSAPP
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-neonBlue/20 bg-darkBg py-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-neonBlue to-neonPurple p-0.5 shadow-neon">
+                    <div class="w-full h-full bg-darkBg rounded-[6px] flex items-center justify-center font-orbitron font-bold text-neonBlue text-sm">
+                        LC
+                    </div>
+                </div>
+                <span class="font-orbitron font-bold text-sm tracking-widest text-white">LAHORE CRUST</span>
+            </div>
+            <p class="text-xs text-gray-500 text-center">
+                © 2026 Lahore Crust. Engineered with custom 3D WebGL by Lahore Web Works for global clients.
+            </p>
+            <div class="flex space-x-4 text-gray-400">
+                <a href="#" class="hover:text-neonBlue transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-neonBlue transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="https://wa.me/" target="_blank" class="hover:text-neonBlue transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Three.js Background Particle Script -->
+    <script>
+        window.onload = function() {
+            const container = document.getElementById('webgl-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Create floating glowing particles
+            const particleCount = 120;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 20;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const material = new THREE.PointsMaterial({
+                color: 0x00f0ff,
+                size: 0.08,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            camera.position.z = 5;
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+                particles.rotation.x += 0.0005;
+                particles.rotation.y += 0.001;
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Resize Handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+    </script>
+</body>
+</html>
